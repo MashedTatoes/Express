@@ -2,7 +2,7 @@ import Text.Read
 import Data.Char
 
 data Token =
-    InvalidToken 
+    InvalidSyntax 
     | NumInt Int
     | OpAdd
     | OpMinus
@@ -21,7 +21,7 @@ class Eval a where
 instance Eval Token where
     eval OpAdd (NumInt x) (NumInt y) = NumInt $ x + y
     eval OpMinus (NumInt x) (NumInt y) = NumInt $ x - y
-    eval _ _ _ = InvalidToken
+    eval _ _ _ = InvalidSyntax
 
 lexer :: [Char] -> [Token]
 lexer [] = []
@@ -36,10 +36,9 @@ lexer (x:xs)
 parse :: [Token] -> ParseTree
 parse [] = EmptyTree
 parse [x] = Node x
-parse (x:y:z:xs)
-    | x `elem` [OpAdd,OpMinus] = case (x,y,z) of 
-        (_,NumInt n1,NumInt n2) -> Operation x (parse [NumInt n1]) (parse (z:xs))
-        (_, NumInt n1, _) -> Operation x (parse [NumInt n1]) (parse (z:xs))
+parse ((NumInt x):xs) = Operation (head xs) (parse [NumInt x]) (parse $ tail xs )
+parse (x:xs) 
+    | x `elem` [OpAdd,OpMinus] = Operation x (parse [head xs]) (parse $ tail xs)
 
 
 interpret :: ParseTree -> Token
