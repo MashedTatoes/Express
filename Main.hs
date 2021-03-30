@@ -1,5 +1,6 @@
 import Text.Read
 import Data.Char
+import Data.Maybe
 
 data Token =
     InvalidSyntax 
@@ -28,15 +29,17 @@ instance Eval Token where
 
 lexer :: [Char] -> [Token]
 lexer [] = []
-lexer (x:xs)
-    | x == '+' = OpAdd : lexer xs
-    | x == ' ' = lexer xs
-    | x == '-' = OpMinus : lexer xs
-    | x == '*' = OpMul : lexer xs
-    | x == '(' = BracketOpen : lexer xs
-    | x == ')' = BracketClose : lexer xs
-    | isDigit x =  NumInt (digitToInt x) : lexer xs
-
+lexer xs
+    | filterToken == "+" = OpAdd : lexer remainder
+    | filterToken == " " = lexer remainder
+    | filterToken == "-" = OpMinus : lexer remainder
+    | filterToken == "*" = OpMul : lexer remainder
+    | filterToken == ")" = BracketOpen : lexer remainder
+    | filterToken == "(" = BracketClose : lexer remainder
+    | isJust (readMaybe filterToken :: Maybe Integer)  =  NumInt (read filterToken) : lexer remainder
+    where 
+        (token,remainder) = splitAt (1 + length ( takeWhile(/= ' ') xs )) xs 
+        filterToken = filter (/= ' ') token
 parse :: [Token] -> ParseTree
 parse [] = EmptyTree
 parse [x] = Node x
