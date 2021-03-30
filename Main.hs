@@ -6,6 +6,7 @@ data Token =
     | NumInt Int
     | OpAdd
     | OpMinus
+    | OpMul
     | BracketOpen
     | BracketClose
     deriving(Show,Eq)
@@ -21,6 +22,8 @@ class Eval a where
 instance Eval Token where
     eval OpAdd (NumInt x) (NumInt y) = NumInt $ x + y
     eval OpMinus (NumInt x) (NumInt y) = NumInt $ x - y
+    eval OpMul (NumInt x) (NumInt y) = NumInt $ x * y
+    
     eval _ _ _ = InvalidSyntax
 
 lexer :: [Char] -> [Token]
@@ -29,6 +32,7 @@ lexer (x:xs)
     | x == '+' = OpAdd : lexer xs
     | x == ' ' = lexer xs
     | x == '-' = OpMinus : lexer xs
+    | x == '*' = OpMul : lexer xs
     | x == '(' = BracketOpen : lexer xs
     | x == ')' = BracketClose : lexer xs
     | isDigit x =  NumInt (digitToInt x) : lexer xs
@@ -38,7 +42,7 @@ parse [] = EmptyTree
 parse [x] = Node x
 parse ((NumInt x):xs) = Operation (head xs) (parse [NumInt x]) (parse $ tail xs )
 parse (x:xs) 
-    | x `elem` [OpAdd,OpMinus] = Operation x (parse [head xs]) (parse $ tail xs)
+    | x `elem` [OpAdd,OpMinus,OpMul] = Operation x (parse [head xs]) (parse $ tail xs)
 
 
 interpret :: ParseTree -> Token
