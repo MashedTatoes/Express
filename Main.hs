@@ -27,31 +27,39 @@ instance Eval Token where
     
     eval _ _ _ = InvalidSyntax
 
+collectToken :: [Char] -> [Char]
+collectToken [] = []
+collectToken (' ':xs) = ""
+collectToken (x:xs) = x:collectToken xs
+
+
 lexer :: [Char] -> [Token]
 lexer [] = []
 lexer xs
-    | filterToken == "+" = OpAdd : lexer remainder
-    | filterToken == " " = lexer remainder
-    | filterToken == "-" = OpMinus : lexer remainder
-    | filterToken == "*" = OpMul : lexer remainder
-    | filterToken == ")" = BracketOpen : lexer remainder
-    | filterToken == "(" = BracketClose : lexer remainder
-    | isJust (readMaybe filterToken :: Maybe Integer)  =  NumInt (read filterToken) : lexer remainder
+    | token == "+" = OpAdd : lexer remainder
+    | token == " " = lexer remainder
+    | token == "-" = OpMinus : lexer remainder
+    | token == "*" = OpMul : lexer remainder
+    | token == ")" = BracketOpen : lexer remainder
+    | token == "(" = BracketClose : lexer remainder
+    | isJust (readMaybe token :: Maybe Integer)  =  NumInt (read token) : lexer remainder
     where 
-        (token,remainder) = splitAt (1 + length ( takeWhile(/= ' ') xs )) xs 
-        filterToken = filter (/= ' ') token
+        token = collectToken xs
+        (_,remainder) = splitAt (1 +  length token ) xs 
+        
 parse :: [Token] -> ParseTree
 parse [] = EmptyTree
 parse [x] = Node x
 parse ((NumInt x):xs) = Operation (head xs) (parse [NumInt x]) (parse $ tail xs )
-parse (x:xs) 
-    | x `elem` [OpAdd,OpMinus,OpMul] = Operation x (parse [head xs]) (parse $ tail xs)
+
 
 
 interpret :: ParseTree -> Token
 interpret EmptyTree = NumInt 0
 interpret (Node x) = x
 interpret (Operation op left right) =  eval op (interpret left) (interpret right)
+
+
     
 
 
