@@ -6,7 +6,7 @@
 
 ### Arithmetic:
 
-Only +/- supported so far
+Only +,-,* supported so far
 
 Example:
 
