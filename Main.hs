@@ -1,5 +1,7 @@
 module Main where
-import Core (interpret,tokenize,parse,Token)
+import Core.Interpreter
+import Core.Lexer
+import Core.Parser
 import Control.Monad
 main::IO ()
 main =
