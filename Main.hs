@@ -10,7 +10,8 @@ data Token =
     | OpMul
     | BracketOpen
     | BracketClose
-    deriving(Show,Eq)
+    deriving(Show,Eq,Ord)
+
 
 data ParseTree =
     EmptyTree 
@@ -46,14 +47,22 @@ lexer xs
     where 
         token = collectToken xs
         (_,remainder) = splitAt (1 +  length token ) xs 
-        
+
+findTokenPositions :: Token -> [Token] -> [Int]
+findTokenPositions _ [] = []
+findTokenPositions token (x:xs) 
+    | x == token = length xs:findTokenPositions token xs
+    | x /= token = findTokenPositions token xs
+
 parse :: [Token] -> ParseTree
 parse [] = EmptyTree
 parse [x] = Node x
-parse ((NumInt x):xs) = Operation (head xs) (parse [NumInt x]) (parse $ tail xs )
-
-
-
+parse xs =
+    let operationPoints = findTokenPositions (maximum xs) xs
+        (left,right) = splitAt (head operationPoints) xs
+        op = head right
+    in
+        Operation op (parse left) (parse $ tail right)
 interpret :: ParseTree -> Token
 interpret EmptyTree = NumInt 0
 interpret (Node x) = x
