@@ -6,21 +6,25 @@ author:             lappna
 maintainer:         nathan.lapp@sheridancollege.ca
 
 
-
-
-
-
 extra-source-files:
     CHANGELOG.md
     README.md
 
+library LibExpress
+    hs-source-dirs: src
+    exposed-modules:  Express.Parser
+                      Express.Interpreter
+                      Express.Lexer
+    build-depends:    base ^>=4.14.1.0    
+
+
 executable ExpressMain
     main-is:          Main.hs
 
-    build-depends:    base ^>=4.14.1.0
-    hs-source-dirs:   src
+    build-depends:
+        base ^>=4.14.1.0,
+        LibExpress
+
+    hs-source-dirs:   app
 
     default-language: Haskell2010
-    other-modules:    Express.Parser
-                      Express.Interpreter
-                      Express.Lexer
