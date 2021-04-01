@@ -1,5 +1,5 @@
 module Express.Interpreter where
-import Express.Lexer( Token(OpAdd, OpMinus, OpMul, InvalidSyntax, NumInt) )
+import Express.Lexer( Token(OpAdd, OpMinus, OpMul, InvalidSyntax, NumInt,Equal,Boolean) )
 import Express.Parser ( ParseTree(..) )
 
 class Eval a where 
@@ -9,6 +9,7 @@ instance Eval Token where
     eval OpAdd (NumInt x) (NumInt y) = NumInt $ x + y
     eval OpMinus (NumInt x) (NumInt y) = NumInt $ x - y
     eval OpMul (NumInt x) (NumInt y) = NumInt $ x * y
+    eval Equal (NumInt x) (NumInt y) = Boolean $ x == y
     
     eval _ _ _ = InvalidSyntax
 
