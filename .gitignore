@@ -1,23 +1,71 @@
-dist
-dist-*
-cabal-dev
-*.o
-*.hi
-*.hie
-*.chi
-*.chs.h
-*.dyn_o
-*.dyn_hi
-.hpc
-.hsenv
+# trivial gitignore file
 .cabal-sandbox/
 cabal.sandbox.config
-*.prof
-*.aux
-*.hp
-*.eventlog
-.stack-work/
 cabal.project.local
-cabal.project.local~
-.HTF/
 .ghc.environment.*
+cabal-dev/
+.hpc/
+*.hi
+*.o
+*.p_hi
+*.prof
+*.tix
+dist
+dist-*
+register.sh
+./cabal.config
+cabal-tests.log
+.python-sphinx-virtualenv/
+
+/Cabal/dist/
+/Cabal/tests/Setup
+/Cabal/Setup
+/Cabal/source-file-list
+
+/cabal-install/dist/
+/cabal-install/Setup
+/cabal-install/source-file-list
+
+# Output of release and bootstrap
+_build
+
+# editor temp files
+
+*#
+.#*
+*~
+.*.swp
+*.bak
+
+# GHC build
+
+Cabal/GNUmakefile
+Cabal/dist-boot/
+Cabal/dist-install/
+Cabal/ghc.mk
+
+
+# TAGS files
+TAGS
+tags
+ctags
+
+# stack artifacts
+/.stack-work/
+stack.yaml.lock
+
+# Shake artifacts
+.shake*
+progress.txt
+
+# test files
+register.sh
+
+# python artifacts from documentation builds
+*.pyc
+
+# macOS folder metadata
+.DS_Store
+
+# benchmarks
+bench.html

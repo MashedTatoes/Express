@@ -1,6 +1,6 @@
-module Core.Interpreter where
-import Core.Lexer
-import Core.Parser
+module Express.Interpreter where
+import Express.Lexer( Token(OpAdd, OpMinus, OpMul, InvalidSyntax, NumInt) )
+import Express.Parser ( ParseTree(..) )
 
 class Eval a where 
     eval :: a -> a -> a -> a

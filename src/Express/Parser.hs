@@ -1,5 +1,5 @@
-module Core.Parser where
-import Core.Lexer
+module Express.Parser where
+import Express.Lexer ( Token )
 
 
 data ParseTree =

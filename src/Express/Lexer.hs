@@ -1,4 +1,4 @@
-module Core.Lexer where
+module Express.Lexer where
 import Text.Read ( readMaybe )
 import Data.Char ()
 import Data.Maybe ( isJust )
